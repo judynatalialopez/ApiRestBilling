@@ -96,6 +96,19 @@ namespace ApiRestBilling.Controllers
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
 
+        [HttpPost("lstproducts")]
+        public async Task<ActionResult<List<Product>>> PostProducts(List<Product> products)
+        {
+            if (_context.Products == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Products'  is null.");
+            }
+            _context.Products.AddRangeAsync(products);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetProducts",  products);
+        }
+
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
