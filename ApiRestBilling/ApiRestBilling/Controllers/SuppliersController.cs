@@ -9,6 +9,7 @@ namespace ApiRestBilling.Controllers
 {
     [Route("api/[controller]")] // Framework de ruteo. Ámbito Global
     [ApiController]
+
     public class SuppliersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
