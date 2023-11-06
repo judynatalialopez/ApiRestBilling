@@ -62,6 +62,19 @@ namespace ApiRestBilling.Controllers
             return  CreatedAtAction("Get", new {id = supplier.Id}, supplier);
         }
 
+        [HttpPost("lstsuppliers")]
+        public async Task<ActionResult<List<Supplier>>> PostSuppliers(List<Supplier> suppliers)
+        {
+            if (_context.Suppliers == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Suppliers'  is null.");
+            }
+            _context.Suppliers.AddRangeAsync(suppliers);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetCustomers", suppliers);
+        }
+
         // PUT api/<SuppliersController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Supplier supplier)
