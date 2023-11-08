@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiRestBilling.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231108210049_initial-models-BaseDeDatos")]
-    partial class initialmodelsBaseDeDatos
+    [Migration("20231108214132_initial-models-Natalia")]
+    partial class initialmodelsNatalia
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
