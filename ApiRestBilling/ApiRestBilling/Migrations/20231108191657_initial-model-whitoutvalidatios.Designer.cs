@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiRestBilling.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231101191408_initial-models-withoutvalidatios")]
-    partial class initialmodelswithoutvalidatios
+    [Migration("20231108191657_initial-model-whitoutvalidatios")]
+    partial class initialmodelwhitoutvalidatios
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,6 +106,9 @@ namespace ApiRestBilling.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("Subtotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)");

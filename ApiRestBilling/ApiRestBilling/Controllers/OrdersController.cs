@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiRestBilling.Data;
 using ApiRestBilling.Models;
+using ApiRestBilling.Services;
 
 namespace ApiRestBilling.Controllers
 {
@@ -16,9 +17,11 @@ namespace ApiRestBilling.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public OrdersController(ApplicationDbContext context)
+        private readonly IPurchaseOrdersService _purchaseOrdersService;
+        public OrdersController(ApplicationDbContext context, IPurchaseOrdersService purchaseOrdersService)
         {
             _context = context;
+            _purchaseOrdersService = purchaseOrdersService;
         }
 
         // GET: api/Orders
@@ -94,50 +97,24 @@ namespace ApiRestBilling.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Orders'  is null.");
             }
 
-            //calcular el total de la orden de compra
-            decimal? totalOrden = 0;
-
-            foreach (var oi in order.OrderItems)
+            //Recorremos cada detalle de la compra
+            foreach (var detalle in order.OrderItems)
             {
-                //buscar el producto en la base de datos por el ID 
-                var producto = await _context.Products.FindAsync(oi.ProductId);
+                //Asignar el precio unitario del producto al detalle
+                detalle.UnitPrice = await _purchaseOrdersService.CheckUnitPrice(detalle);
 
-                if (producto == null)
-                {
-                    return BadRequest($"el producto con ID{oi.ProductId}no fue encontrado");
-                }
-
-                //asignar el precio unitario del producto al detalle 
-                oi.UnitPrice = producto.UnitPrice;
-
-                //calcular el Subtotal de cada uno de los Items de la orden 
-                oi.Subtotal = oi.UnitPrice * oi.Quantity;
-
-                // calcular el total de la Orden de Compra 
-                totalOrden += oi.Subtotal;
+                //calcular el subtotal
+                detalle.Subtotal = await _purchaseOrdersService.CalculateSubtotalOrderItem(detalle);
             }
 
-            // asignar el total calculado a las orden de compra 
-            order.TotalAmount = Convert.ToDecimal(totalOrden);
+            //Asignar el total asignado de la orden de compra 
+            order.TotalAmount = _purchaseOrdersService.CalcularTotalOrderItems((List<OrderItem>)order.OrderItems);
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GerOrder", new { id = order.Id }, order);
+            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
         }
-
-            /*[HttpPost]
-            public async Task<ActionResult<Order>> PostOrder(Order order)
-            {
-              if (_context.Orders == null)
-              {
-                  return Problem("Entity set 'ApplicationDbContext.Orders'  is null.");
-              }
-                _context.Orders.Add(order);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetOrder", new { id = order.Id }, order);
-            }*/
 
             // DELETE: api/Orders/5
             [HttpDelete("{id}")]

@@ -5,7 +5,7 @@
 namespace ApiRestBilling.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmodelswithoutvalidatios : Migration
+    public partial class initialmodelsBaseDeDatos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
