@@ -16,8 +16,8 @@ namespace ApiRestBilling.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
         private readonly IPurchaseOrdersService _purchaseOrdersService;
+
         public OrdersController(ApplicationDbContext context, IPurchaseOrdersService purchaseOrdersService)
         {
             _context = context;

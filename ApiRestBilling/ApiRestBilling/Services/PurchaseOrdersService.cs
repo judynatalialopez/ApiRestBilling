@@ -6,7 +6,7 @@ namespace ApiRestBilling.Services
 {
     public class PurchaseOrdersService : IPurchaseOrdersService
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public PurchaseOrdersService(ApplicationDbContext context)
         {
@@ -23,7 +23,7 @@ namespace ApiRestBilling.Services
 
             return product;
         }
-        public async Task<decimal> checkUnitPrice(OrderItem detalle) 
+        public async Task<decimal> CheckUnitPrice(OrderItem detalle) 
         {
             var product = await GetProductById(detalle.ProductId);
             detalle.UnitPrice = product.UnitPrice;
@@ -33,13 +33,13 @@ namespace ApiRestBilling.Services
 
         public async Task<decimal> CalculateSubtotalOrderItem(OrderItem item)
         {
-            decimal UnitPrice = await checkUnitPrice(item);
-            item.Subtotal = UnitPrice * item.Quantity;
+            decimal unitPrice = await CheckUnitPrice(item);
+            item.Subtotal = unitPrice * item.Quantity;
 
-            return (decimal) item.Subtotal;
+            return (decimal)item.Subtotal;
         }
 
-        public decimal CalculateTotalOrderItem(List<OrderItem> items) 
+        public decimal CalcularTotalOrderItems(List<OrderItem> items) 
         {
             decimal total = 0;
             foreach (var item in items)
@@ -56,6 +56,11 @@ namespace ApiRestBilling.Services
             throw new NotImplementedException();
         }
 
+        /*public Task<decimal> ChechUnitPrice(OrderItem detalle)
+        {
+            throw new NotImplementedException();
+        }
+
         public decimal CalcularTotalOrderItems(List<OrderItem> item)
         {
             throw new NotImplementedException();
@@ -64,6 +69,6 @@ namespace ApiRestBilling.Services
         public Task<decimal> CheckUnitPrice(OrderItem detalle)
         {
             throw new NotImplementedException();
-        }
+        }*/
     }
 }
