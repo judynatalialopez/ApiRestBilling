@@ -96,6 +96,19 @@ namespace ApiRestBilling.Controllers
             return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
         }
 
+        [HttpPost("lstcustomers")]
+        public async Task<ActionResult<List<Customer>>> PostCustomers(List<Customer> customers)
+        {
+            if (_context.Customers == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Customers'  is null.");
+            }
+            _context.Customers.AddRangeAsync(customers);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetCustomers", customers);
+        }
+
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)

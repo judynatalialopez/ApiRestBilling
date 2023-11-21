@@ -19,5 +19,7 @@ namespace ApiRestBilling.Models
         public Order? Order { get; set; }
         [ForeignKey("ProductId")]
         public Product? Product { get; set; }
+
+        public decimal? Subtotal { get; set; } = 0;
     }
 }

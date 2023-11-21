@@ -1,4 +1,5 @@
-﻿using ApiRestBilling.Data;
+﻿//////using ApiRestBilling.Data;
+using ApiRestBilling.Data;
 using ApiRestBilling.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace ApiRestBilling.Controllers
 {
     [Route("api/[controller]")] // Framework de ruteo. Ámbito Global
     [ApiController]
+
     public class SuppliersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -59,6 +61,19 @@ namespace ApiRestBilling.Controllers
             _context.Suppliers.Add(supplier);
             await _context.SaveChangesAsync();
             return  CreatedAtAction("Get", new {id = supplier.Id}, supplier);
+        }
+
+        [HttpPost("lstsuppliers")]
+        public async Task<ActionResult<List<Supplier>>> PostSuppliers(List<Supplier> suppliers)
+        {
+            if (_context.Suppliers == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Suppliers'  is null.");
+            }
+            _context.Suppliers.AddRangeAsync(suppliers);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetCustomers", suppliers);
         }
 
         // PUT api/<SuppliersController>/5
