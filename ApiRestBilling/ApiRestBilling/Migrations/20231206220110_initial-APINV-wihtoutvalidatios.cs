@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiRestBilling.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmodelsNatalia : Migration
+    public partial class initialAPINVwihtoutvalidatios : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

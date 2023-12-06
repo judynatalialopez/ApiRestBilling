@@ -104,6 +104,7 @@ namespace ApiRestBilling.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Customers'  is null.");
             }
             _context.Customers.AddRangeAsync(customers);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCustomers", customers);
